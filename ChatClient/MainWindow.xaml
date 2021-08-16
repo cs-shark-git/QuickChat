@@ -5,8 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ChatClient"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        AllowsTransparency="True"
+        WindowStyle="None"
+        WindowStartupLocation="CenterScreen"
+        MinHeight="250"
+        MinWidth="400"
+        Title="QickChat" Height="450" Width="800" Background="#121212">
     <Grid>
-
+        <StackPanel Orientation="Vertical" VerticalAlignment="Center" Height="125">
+            <TextBlock Text="Welcome in QuickChat" TextAlignment="Center" Margin="0,0,0,25" FontFamily="Consolas" FontSize="16" Foreground="White"/>
+            <Button Content="Connect" Width="250" Height="50" FontFamily="Consolas" FontSize="16.3" BorderThickness="0" Focusable="False"/>
+        </StackPanel>
+        <Button Content="Exit" Width="125" Height="25" FontFamily="Consolas" FontSize="14" BorderThickness="0" Background="DarkRed" Margin="0,350,0,0" Foreground="White" Focusable="False"/>
     </Grid>
 </Window>
