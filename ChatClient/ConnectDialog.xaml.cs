@@ -10,29 +10,18 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace ChatClient
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Логика взаимодействия для ConnectDialog.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class ConnectDialog : Window
     {
-        public MainWindow()
+        public ConnectDialog()
         {
             InitializeComponent();
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            Application.Current.Shutdown();
-        }
-
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            new ConnectDialog().ShowDialog();
         }
     }
 }
