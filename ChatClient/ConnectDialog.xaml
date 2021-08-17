@@ -42,7 +42,7 @@
                 <TextBox Width="200" />
             </StackPanel>
             <Button Grid.Row ="2" Margin="320,100,300,65" FontFamily="Consolas" 
-                    FontSize="16" Background="White" BorderThickness="0">
+                    FontSize="16" Background="White" BorderThickness="0" Template="{StaticResource btTemplate}">
                 Connect
             </Button>
         </Grid>

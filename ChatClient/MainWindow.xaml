@@ -12,28 +12,7 @@
         MinWidth="400"
         Title="QickChat" Height="450" Width="800" Background="#121212">
     <Window.Resources>
-        <ControlTemplate TargetType="Button" x:Key="btTemplate">
-            <Border x:Name="buttonBorder"
-                    BorderThickness="{TemplateBinding BorderThickness}"
-                    Background="{TemplateBinding Background}"
-                    Height="{TemplateBinding Height}"
-                    Width="{TemplateBinding Width}" >
-                <ContentControl Margin="{TemplateBinding Padding}"
-                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                FontFamily="{TemplateBinding FontFamily}"
-                                FontSize="{TemplateBinding FontSize}"
-                                Foreground="{TemplateBinding Foreground}"
-                                Content="{TemplateBinding Content}" />
-            </Border>
-            <ControlTemplate.Triggers>
-                <Trigger Property="IsPressed" Value="true">
-                    <Setter TargetName="buttonBorder" Property="Background" Value="Gray" />
-                </Trigger>
-            </ControlTemplate.Triggers>
-           
-        </ControlTemplate>
-
+        
         <Style TargetType="TextBlock">
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="FontFamily" Value="Consolas"/>
