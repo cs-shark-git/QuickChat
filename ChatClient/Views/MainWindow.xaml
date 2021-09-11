@@ -4,15 +4,21 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ChatClient"
+        xmlns:vm="clr-namespace:ChatClient.ViewModels"
+        xmlns:cm="clr-namespace:ChatClient.Framework.Commands"
         mc:Ignorable="d"
         AllowsTransparency="True"
         WindowStyle="None"
         WindowStartupLocation="CenterScreen"
         MinHeight="250"
         MinWidth="400"
-        Title="QickChat" Height="450" Width="800" Background="#121212">
+        Title="{Binding Title}" Height="450" Width="800" Background="#121212">
+
+    <Window.DataContext>
+        <vm:MainWindowViewModel/>
+    </Window.DataContext>
     <Window.Resources>
-        
+        <cm:ApplicationExitCommand x:Key="ApplicationExitCommand"/>
         <Style TargetType="TextBlock">
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="FontFamily" Value="Consolas"/>
@@ -22,9 +28,11 @@
         <StackPanel Orientation="Vertical" VerticalAlignment="Center" Height="125">
             <TextBlock Text="Welcome in QuickChat" TextAlignment="Center" Margin="0,0,0,25" 
                        FontSize="24"/>
-            <Button Background="White" Content="Connect" Width="250" Height="50" FontFamily="Consolas" FontSize="16.3" BorderThickness="0" Focusable="False" Template="{StaticResource btTemplate}" Click="Button_Click_1"/>
+            <Button Background="White" Content="Connect" Width="250" Height="50" FontFamily="Consolas" FontSize="16.3" 
+                    BorderThickness="0" Focusable="False" Template="{StaticResource btTemplate}" Command="{Binding OpenConnectDialogCommand}"/>
         </StackPanel>
         <Button Content="Exit" Width="125" Height="25" FontFamily="Consolas" FontSize="14" BorderThickness="0" Background="DarkRed" Margin="0,350,0,0" Foreground="White"
-                Focusable="False" Template="{StaticResource btTemplate}" Click="Button_Click"/>
+                Focusable="False" Template="{StaticResource btTemplate}" Command="{StaticResource ApplicationExitCommand}"/>
+
     </Grid>
 </Window>
