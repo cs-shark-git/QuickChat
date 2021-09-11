@@ -4,12 +4,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ChatClient"
+        xmlns:vm="clr-namespace:ChatClient.ViewModels"
         mc:Ignorable="d"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
         Background="#121212"
         Title="Connect" Height="450" Width="800">
-
+    <Window.DataContext>
+        <vm:ConnectDialogViewModel/>
+    </Window.DataContext>
     <Window.Resources>
         <Style TargetType="TextBlock">
             <Setter Property="Foreground" Value="White"/>
@@ -28,10 +31,10 @@
             <StackPanel Margin="0,15,0,15" Orientation="Horizontal" 
                         Grid.Row="0">
                 <TextBlock Text="Server" Width="280" 
-                           TextAlignment="Right" 
+                           TextAlignment="Right"
                            Padding="0,2,0,0"
                            FontSize="14" Margin="0,0,10,0"/>
-                <TextBox Width="200" />
+                <TextBox Width="200" Text="{Binding Adress, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
             <StackPanel Margin="0,15,0,15" Orientation="Horizontal" 
                         Grid.Row="1">
@@ -39,9 +42,9 @@
                            TextAlignment="Right" 
                            Padding="0,2,0,0"
                            FontSize="14" Margin="0,0,10,0"/>
-                <TextBox Width="200" />
+                <TextBox Width="200" Text="{Binding NickName, UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
-            <Button Grid.Row ="2" Margin="320,100,300,65" FontFamily="Consolas" 
+            <Button Grid.Row ="2" FontFamily="Consolas" Width="150" Height="50"
                     FontSize="16" Background="White" BorderThickness="0" Template="{StaticResource btTemplate}">
                 Connect
             </Button>
