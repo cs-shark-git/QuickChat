@@ -12,7 +12,7 @@
         WindowStartupLocation="CenterScreen"
         MinHeight="250"
         MinWidth="400"
-        Title="{Binding Title}" Height="450" Width="800" Background="#121212">
+        Title="" Height="450" Width="800" Background="#121212">
 
     <Window.DataContext>
         <vm:MainWindowViewModel/>
