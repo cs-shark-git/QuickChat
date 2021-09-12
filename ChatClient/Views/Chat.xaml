@@ -4,10 +4,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ChatClient"
+        xmlns:vm="clr-namespace:ChatClient.ViewModels"
+        xmlns:m="clr-namespace:ChatClient.Models"
         mc:Ignorable="d"
         MinHeight="400"
         MinWidth="600"
         Title="Chat - SomeSever" Height="450" Width="800" Background="#121212">
+    <Window.DataContext>
+        <vm:ChatViewModel/>
+    </Window.DataContext>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200px"/>
@@ -17,28 +22,13 @@
                 BorderThickness="0" Background="DarkRed" Margin="0,1,2,0" Foreground="White"
                 Focusable="False" Template="{StaticResource btTemplate}"
                 VerticalAlignment="Top" HorizontalAlignment="Right" Grid.Column="1"/>
-        <ListBox Background="#1b1a1b" BorderThickness="0">
-            <ListBoxItem>
-                <TextBlock FontSize="16"
-                       FontFamily="Consolas"
-                       Foreground="White"
-                       Text="CS-Shark" 
-                       HorizontalAlignment="Center"/>
-            </ListBoxItem>
-            <ListBoxItem>
-                <TextBlock FontSize="16"
-                       FontFamily="Consolas"
-                       Foreground="White"
-                       Text="User256" 
-                       HorizontalAlignment="Center"/>
-            </ListBoxItem>
-            <ListBoxItem>
-                <TextBlock FontSize="16"
-                       FontFamily="Consolas"
-                       Foreground="White"
-                       Text="Anonim" 
-                       HorizontalAlignment="Center"/>
-            </ListBoxItem>
+        <ListBox Background="#1b1a1b" BorderThickness="0" ItemsSource="{Binding Users}">
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="m:User">
+                    <TextBlock  Text="{Binding NickName}" Foreground="White"
+                                FontFamily="Consolas" FontSize="16"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
         </ListBox>
         <Grid Grid.Column="1" Grid.ColumnSpan="2">
             <Grid.RowDefinitions>

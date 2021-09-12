@@ -8,7 +8,7 @@ using System.Windows;
 
 namespace ChatClient.Framework.Commands
 {
-    class ApplicationExitCommand : Command
+    internal class ApplicationExitCommand : Command
     {
         public override bool CanExecute(object parameter) => true;
 

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ChatClient.ViewModels
 {
-    class ConnectDialogViewModel : ViewModel
+    internal class ConnectDialogViewModel : ViewModel
     {
 
         private string _adress;

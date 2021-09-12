@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ChatClient.ViewModels.Base
 {
-    abstract class ViewModel : INotifyPropertyChanged
+    internal abstract class ViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 

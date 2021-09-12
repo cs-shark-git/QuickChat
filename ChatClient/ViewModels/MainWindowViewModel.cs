@@ -9,7 +9,7 @@ using System.Windows.Input;
 
 namespace ChatClient.ViewModels
 {
-    class MainWindowViewModel : ViewModel
+    internal class MainWindowViewModel : ViewModel
     {
         public ICommand OpenConnectDialogCommand { get; }
 
