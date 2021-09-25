@@ -4,9 +4,21 @@ namespace ChatServer
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
-            Console.WriteLine("Hello World!");
+            int port = 49276;
+            Server server = new Server(port);
+            Console.WriteLine("Server started...");
+            try
+            {               
+                server.Listen();
+            }
+            catch(Exception ex)
+            {
+                server.ShutDownServer();
+                Console.WriteLine(ex.Message);
+            }
+
         }
     }
 }
