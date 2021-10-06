@@ -10,15 +10,14 @@ namespace ChatServer
             Server server = new Server(port);
             Console.WriteLine("Server started...");
             try
-            {               
+            {
                 server.Listen();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 server.ShutDownServer();
                 Console.WriteLine(ex.Message);
             }
-
         }
     }
 }

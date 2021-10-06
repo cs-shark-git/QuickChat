@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:ChatClient"
         xmlns:vm="clr-namespace:ChatClient.ViewModels"
         mc:Ignorable="d"
+        xmlns:cm="clr-namespace:ChatClient.Framework.Commands"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
         Background="#121212"
@@ -14,9 +15,10 @@
         <vm:ConnectDialogViewModel/>
     </Window.DataContext>
     <Window.Resources>
+        <cm:OpenChatCommand x:Key="OpenChatCommand"/>
         <Style TargetType="TextBlock">
             <Setter Property="Foreground" Value="White"/>
-            <Setter Property="FontFamily" Value="Consolas"/>
+            <Setter Property="FontFamily" Value="Calibri"/>
         </Style>
     </Window.Resources>
     <Grid>
@@ -42,10 +44,11 @@
                            TextAlignment="Right" 
                            Padding="0,2,0,0"
                            FontSize="14" Margin="0,0,10,0"/>
-                <TextBox Width="200" Text="{Binding NickName, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBox Width="200" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
-            <Button Grid.Row ="2" FontFamily="Consolas" Width="150" Height="50"
-                    FontSize="16" Background="White" BorderThickness="0" Template="{StaticResource btTemplate}">
+            <Button Grid.Row ="2" FontFamily="Calibri" Width="150" Height="50"
+                    FontSize="16" Background="White" BorderThickness="0" 
+                    Template="{StaticResource btTemplate}" Command="{Binding OnOpenChatCommand}">
                 Connect
             </Button>
         </Grid>

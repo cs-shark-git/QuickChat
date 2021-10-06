@@ -8,6 +8,6 @@ namespace ChatClient.Models
 {
     internal class User
     {
-        public string NickName { get; set; }
+        public string Name { get; set; }
     }
 }

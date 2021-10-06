@@ -11,15 +11,6 @@ namespace ChatClient.ViewModels
 {
     internal class MainWindowViewModel : ViewModel
     {
-        public ICommand OpenConnectDialogCommand { get; }
 
-        private void OpenConnectDialogCommandExecute(object p) => new ConnectDialog().ShowDialog();
-
-        private bool OpenConnectDialogCommandCanExecute(object p) => true;
-
-        public MainWindowViewModel()
-        {
-            OpenConnectDialogCommand = new RelayCommand(OpenConnectDialogCommandExecute, OpenConnectDialogCommandCanExecute);
-        }
     }
 }
