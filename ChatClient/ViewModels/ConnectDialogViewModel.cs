@@ -36,7 +36,7 @@ namespace ChatClient.ViewModels
         {
             get => _name;
             set
-            {                
+            {
                 Set(ref _name, value);
             }
         }
@@ -47,8 +47,10 @@ namespace ChatClient.ViewModels
         {
             ConnectDataModelStatic.Name = _name;
             ConnectDataModelStatic.Adress = Adress;
-            OpenChatCommand.Execute(parameter);
+            if (ConnectDataModelStatic.ValidationStatus)
+                OpenChatCommand.Execute(parameter);
 
+            ConnectDataModelStatic.ValidationStatus = true;
         }
         public bool OnOpenChatCommandCanExecute(object parameter) => OpenChatCommand.CanExecute(parameter);
 

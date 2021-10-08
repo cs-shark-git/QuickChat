@@ -19,6 +19,7 @@ namespace ChatClient.Framework.Commands
             _window = new ConnectDialog() {
                 Owner = Application.Current.MainWindow
             };
+            _window.Closed += OnWindowClosed;
             _window.ShowDialog();
         }
 

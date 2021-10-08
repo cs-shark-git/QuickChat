@@ -10,17 +10,20 @@ namespace ChatClient.Framework.Commands
 {
     class OpenChatCommand : Command
     {
-        private Chat _window;
+        protected Chat _window;
 
         public override bool CanExecute(object parameter) => true;
 
         public override void Execute(object parameter)
         {
+             
             _window = new Chat()
             {
                 Owner = Application.Current.MainWindow
             };
-            _window.ShowDialog();
+
+            _window.Closed += OnWindowClosed;
+            _window.Show();
         }
 
         private void OnWindowClosed(object sender, EventArgs e)

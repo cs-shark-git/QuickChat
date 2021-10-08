@@ -39,7 +39,6 @@ namespace ChatClient.Service
 
         private TcpClient _tcpClient;
         private NetworkStream _netStream;
-
         private Dispatcher _dispatcher;
 
 
@@ -47,8 +46,10 @@ namespace ChatClient.Service
         {
             Messages = new ObservableCollection<Message>();
             _tcpClient = new TcpClient();
+
             _host = host;
             _port = port;
+
             _dispatcher = dispatcher;
         }
 
@@ -62,8 +63,8 @@ namespace ChatClient.Service
         private void Procces()
         {
             SendMessage(_name);
-            Thread thread = new Thread(ReceiveMessages);
-            thread.Start();
+            Task task = new Task(ReceiveMessages);
+            task.Start();
         }
 
         public void SendMessage(string message)
@@ -77,17 +78,26 @@ namespace ChatClient.Service
 
         private void ReceiveMessages()
         {
-            BinaryReader br = new BinaryReader(_netStream, Encoding.Default, true);
+            var br = new BinaryReader(_netStream, Encoding.Default, true);
+
             while (true)
             {
-                string text = br.ReadString();
-                Message message = new Message();
-                message.Text = text;
-                _dispatcher.Invoke(new Action(() =>
+                try
                 {
-                    _messages.Add(message);
-                }));
-                OnMessageListChanged(Messages);
+                    string text = br.ReadString();
+
+                    Message message = new Message();
+                    message.Text = text;
+                    _dispatcher.Invoke(new Action(() =>
+                    {
+                        _messages.Add(message);
+                    }));
+                    OnMessageListChanged(Messages);
+                }
+                catch (IOException)
+                {
+                    break;
+                }
             }
         }
 
@@ -96,7 +106,7 @@ namespace ChatClient.Service
             if (_netStream != null)
                 _netStream.Close();
             if (_tcpClient != null)
-                _tcpClient.Close();
+                _tcpClient.Close();        
         }
     }
 }

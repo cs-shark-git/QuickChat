@@ -53,18 +53,38 @@ namespace ChatClient.ViewModels
             set => Set(ref _messages, value);
         }
 
+        public ICommand DisconnectWindowCommand
+        {
+            get
+            {
+                return new RelayCommand((p) =>
+                {
+                    _client.Stop();
+                }, (p) => true);
+            }
+        }
+        public ICommand DisconnectCommand { get; }
         public ICommand SendMessageCommand { get; }
 
-        public void SendMessageCommandExecute(object parametr)
+        private CloseWindowCommand _closeWindow;
+
+        public bool DisconnectCommandCanExecute(object parameter) => _closeWindow.CanExecute(parameter);
+        public void DisconnectCommandExecute(object parameter)
         {
-            _client.SendMessage(_messageText);
-            var msg = new Message();
-            msg.Text = _messageText;
-            Messages.Add(msg);
-            _messageText = "";
+            _client.Stop();
+            _closeWindow.Execute(parameter);
         }
 
-        public bool SendMessageCommandCanExecute(object parametr) => true;
+        public void SendMessageCommandExecute(object parameter)
+        {
+            _client.SendMessage(MessageText);
+            var msg = new Message();
+            msg.Text = MessageText;
+            Messages.Add(msg);
+            MessageText = "";
+        }
+
+        public bool SendMessageCommandCanExecute(object parameter) => true;
 
         public ChatViewModel()
         {
@@ -85,6 +105,8 @@ namespace ChatClient.ViewModels
                 }
             };
             #endregion
+
+            _closeWindow = new CloseWindowCommand();
 
             _dispatcher = Dispatcher.CurrentDispatcher;
 
@@ -109,6 +131,7 @@ namespace ChatClient.ViewModels
             };
 
             SendMessageCommand = new RelayCommand(SendMessageCommandExecute, SendMessageCommandCanExecute);
+            DisconnectCommand = new RelayCommand(DisconnectCommandExecute, DisconnectCommandCanExecute);
             _client = new Client(_adress, _port, _dispatcher);
             _client.Name = _name;
             _client.OnMessageListChanged += _client_OnMessageListChanged;
