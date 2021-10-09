@@ -42,24 +42,31 @@ namespace ChatClient.ViewModels
         }
 
         public ICommand OnOpenChatCommand { get; }
+        private OpenChatCommand _openChatCommand { get; }
 
         public void OnOpenChatCommandExecute(object parameter)
         {
             ConnectDataModelStatic.Name = _name;
             ConnectDataModelStatic.Adress = Adress;
             if (ConnectDataModelStatic.ValidationStatus)
-                OpenChatCommand.Execute(parameter);
+            {
+                _openChatCommand.Execute(parameter);
+                Application.Current.MainWindow.Hide();
+                _closeWindowCommand.Execute(parameter);
+            }
 
             ConnectDataModelStatic.ValidationStatus = true;
         }
-        public bool OnOpenChatCommandCanExecute(object parameter) => OpenChatCommand.CanExecute(parameter);
+        public bool OnOpenChatCommandCanExecute(object parameter) => _openChatCommand.CanExecute(parameter);
 
-        public OpenChatCommand OpenChatCommand { get; }
+        private CloseWindowCommand _closeWindowCommand { get; }
+
 
         public ConnectDialogViewModel()
         {
 
-            OpenChatCommand = new OpenChatCommand();
+            _openChatCommand = new OpenChatCommand();
+            _closeWindowCommand = new CloseWindowCommand();
             OnOpenChatCommand = new RelayCommand(OnOpenChatCommandExecute, OnOpenChatCommandCanExecute);
         }
     }

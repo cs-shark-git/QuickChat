@@ -48,7 +48,8 @@
             </StackPanel>
             <Button Grid.Row ="2" FontFamily="Calibri" Width="150" Height="50"
                     FontSize="16" Background="White" BorderThickness="0" 
-                    Template="{StaticResource btTemplate}" Command="{Binding OnOpenChatCommand}">
+                    Template="{StaticResource btTemplate}" Command="{Binding OnOpenChatCommand}" 
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=local:ConnectDialog}}">
                 Connect
             </Button>
         </Grid>

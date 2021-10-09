@@ -37,7 +37,7 @@
         <SolidColorBrush x:Key="DisabledForegroundBrush" Color="#121212" />
         <SolidColorBrush x:Key="NormalBrush" Color="#121212" />
         <SolidColorBrush x:Key="NormalBorderBrush" Color="#888" />
-        <SolidColorBrush x:Key="HorizontalNormalBrush" Color="#888" />
+        <SolidColorBrush x:Key="HorizontalNormalBrush" Color="#121212" />
         <SolidColorBrush x:Key="HorizontalNormalBorderBrush" Color="#888" />
         <LinearGradientBrush x:Key="ListBoxBackgroundBrush"
             StartPoint="0,0" EndPoint="1,0.001">
@@ -202,7 +202,7 @@
                 <Border
       Grid.ColumnSpan="5"
       CornerRadius="2"
-      Background="#F0F0F0" />
+      Background="#1b1a1b" />
                 <RepeatButton
       Grid.Column="0"
       Style="{StaticResource ScrollBarLineButton}"

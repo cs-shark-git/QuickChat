@@ -60,6 +60,7 @@ namespace ChatClient.ViewModels
                 return new RelayCommand((p) =>
                 {
                     _client.Stop();
+                    Application.Current.MainWindow.Show();
                 }, (p) => true);
             }
         }
@@ -72,7 +73,9 @@ namespace ChatClient.ViewModels
         public void DisconnectCommandExecute(object parameter)
         {
             _client.Stop();
+            Application.Current.MainWindow.Show();
             _closeWindow.Execute(parameter);
+            
         }
 
         public void SendMessageCommandExecute(object parameter)
