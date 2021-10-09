@@ -119,7 +119,7 @@ namespace ChatServer
             _users.Remove(user);
         }
 
-        public void ShutDownServer()
+        public void Shutdown()
         {
             _tcpListener.Stop();
 

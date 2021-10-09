@@ -15,7 +15,7 @@ namespace ChatServer
             }
             catch (Exception ex)
             {
-                server.ShutDownServer();
+                server.Shutdown();
                 Console.WriteLine(ex.Message);
             }
         }
