@@ -39,8 +39,8 @@ namespace ChatClient.ViewModels
         private string _adress;
         private Client _client;
 
-        private List<User> _users;
-        public List<User> Users
+        private ObservableCollection<User> _users;
+        public ObservableCollection<User> Users
         {
             get => _users;
             set => Set(ref _users, value);
@@ -91,23 +91,6 @@ namespace ChatClient.ViewModels
 
         public ChatViewModel()
         {
-            #region ...
-            Users = new List<User>()
-            {
-                new User()
-                {
-                    Name = "User256"
-                },
-                new User()
-                {
-                    Name = "CS-Shark"
-                },
-                new User()
-                {
-                    Name = "Anonim"
-                }
-            };
-            #endregion
 
             _closeWindow = new CloseWindowCommand();
 
@@ -125,10 +108,6 @@ namespace ChatClient.ViewModels
                 },
                 new Message()
                 {
-                    Text = $"{_name} подключился!"
-                },
-                new Message()
-                {
                     Text = $"Добро пожаловать в чат, {_name}"
                 }
             };
@@ -137,11 +116,17 @@ namespace ChatClient.ViewModels
             DisconnectCommand = new RelayCommand(DisconnectCommandExecute, DisconnectCommandCanExecute);
             _client = new Client(_adress, _port, _dispatcher);
             _client.Name = _name;
-            _client.OnMessageListChanged += _client_OnMessageListChanged;
+            _client.MessageListChanged += OnMessageListChanged;
+            _client.UserListChanged += OnUserListChanged;
             _client.Start();
         }
 
-        private void _client_OnMessageListChanged(ObservableCollection<Message> messageList)
+        private void OnUserListChanged(ObservableCollection<User> userList)
+        {
+            Users = userList;
+        }
+
+        private void OnMessageListChanged(ObservableCollection<Message> messageList)
         {
             Messages = messageList;
         }

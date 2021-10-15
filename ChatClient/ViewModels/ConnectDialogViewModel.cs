@@ -64,7 +64,6 @@ namespace ChatClient.ViewModels
 
         public ConnectDialogViewModel()
         {
-
             _openChatCommand = new OpenChatCommand();
             _closeWindowCommand = new CloseWindowCommand();
             OnOpenChatCommand = new RelayCommand(OnOpenChatCommandExecute, OnOpenChatCommandCanExecute);

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -14,6 +15,8 @@ namespace ChatServer
     {
         TcpListener _tcpListener;
         public List<User> _users;
+
+        private const string USER_CONNECT = "UC";
 
         public Server(int port)
         {
@@ -54,10 +57,13 @@ namespace ChatServer
                 BinaryReader reader = new BinaryReader(user.NetStream, Encoding.Default, true);
 
                 user.Name = reader.ReadString();
-                message = $"[{DateTime.Now.Hour.ToString()}:{DateTime.Now.Minute.ToString()}:{DateTime.Now.Second.ToString()}] {user.Name} подключился к чату";
+                message = user.Name;
                 Console.WriteLine(message);
-                BroadcastMessage(message, user);
+                BroadcastMessage(USER_CONNECT + message, user);
                 reader.Close();
+
+                string jsonUsers = SerializeUsers();
+                SendMessage(jsonUsers, user);
 
                 while(true)
                 {
@@ -103,10 +109,7 @@ namespace ChatServer
                     }
                 }
             }
-
-
         }
-
         private void DisconnectUser(User user)
         {
             user.NetStream?.Close();
@@ -137,6 +140,23 @@ namespace ChatServer
             var msg = reader.ReadString();
             reader.Close();
             return msg;
+        }
+
+        private void SendMessage(string msg, User user)
+        {
+            BinaryWriter writer = new BinaryWriter(user.NetStream, Encoding.Default, true);
+            writer.Write(msg);
+            writer.Close();
+        }
+
+        private string SerializeUsers()
+        {
+            string json = null;
+            foreach(var user in _users)
+            {
+                json += JsonSerializer.Serialize(user) + '/';
+            }
+            return json;
         }
     }
 }
