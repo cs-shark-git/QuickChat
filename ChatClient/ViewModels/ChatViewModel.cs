@@ -80,6 +80,8 @@ namespace ChatClient.ViewModels
 
         public void SendMessageCommandExecute(object parameter)
         {
+            if(string.IsNullOrEmpty(MessageText)) return;
+
             _client.SendMessage(MessageText);
             var msg = new Message();
             msg.Text = MessageText;
@@ -93,7 +95,6 @@ namespace ChatClient.ViewModels
         {
 
             _closeWindow = new CloseWindowCommand();
-
             _dispatcher = Dispatcher.CurrentDispatcher;
 
             _port = ConnectDataModelStatic.Port;
@@ -116,6 +117,7 @@ namespace ChatClient.ViewModels
             DisconnectCommand = new RelayCommand(DisconnectCommandExecute, DisconnectCommandCanExecute);
             _client = new Client(_adress, _port, _dispatcher);
             _client.Name = _name;
+            _client.Messages = Messages;
             _client.MessageListChanged += OnMessageListChanged;
             _client.UserListChanged += OnUserListChanged;
             _client.Start();

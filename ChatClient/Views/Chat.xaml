@@ -325,7 +325,11 @@
             <Grid Grid.Row="1" Margin="10,0,0,10" Background="#1b1a1b">
                 <TextBox Background="#1b1a1b"
                      BorderThickness="0" Foreground="White" FontSize="14" 
-                     FontFamily="Calibri" Padding="10,10,0,0" Text="{Binding MessageText}"></TextBox>
+                     FontFamily="Calibri" Padding="10,10,0,0" Text="{Binding MessageText, UpdateSourceTrigger=PropertyChanged}">
+                    <TextBox.InputBindings>
+                        <KeyBinding Key="Enter" Command="{Binding SendMessageCommand}"/>
+                    </TextBox.InputBindings>
+                </TextBox>
                 <Button Panel.ZIndex="1" Grid.Row="1" Command="{Binding SendMessageCommand}" Width="50" HorizontalAlignment="Right" 
                         Background="#121212" Content="Send" FontFamily="Calibri" FontSize="16" Foreground="White"
                         BorderBrush="#1b1a1b" BorderThickness="2,2,2,2">

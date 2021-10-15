@@ -27,7 +27,7 @@ namespace ChatClient.Service
         public ObservableCollection<Message> Messages
         {
             get => _messages;
-            private set
+            set
             {
                 _messages = value;
             }
@@ -54,7 +54,17 @@ namespace ChatClient.Service
         public Client(string host, int port, Dispatcher dispatcher)
         {
             _users = new ObservableCollection<User>();
-            Messages = new ObservableCollection<Message>();
+            _messages = new ObservableCollection<Message>()
+            {
+                new Message()
+                {
+                    Text = $"Подключение к чату завершено."
+                },
+                new Message()
+                {
+                    Text = $"Добро пожаловать в чат, {_name}"
+                }
+            };
             _tcpClient = new TcpClient();
 
             _host = host;
@@ -126,11 +136,10 @@ namespace ChatClient.Service
                         MessageListChanged(Messages);
                     }                   
                 }
-                catch (IOException ex)
+                catch (IOException)
                 {
 
                     Stop();
-                    MessageBox.Show(ex.Message);
                     return;
                 }
             }
