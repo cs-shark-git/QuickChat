@@ -346,8 +346,8 @@
                     <ColumnDefinition Width="3.5*"/>
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                <ScrollViewer Grid.Column="0" ScrollViewer.VerticalScrollBarVisibility="Visible" FlowDirection="RightToLeft" 
-                              Style="{StaticResource FavsScrollViewer}" >
+                <ScrollViewer Grid.Column="0" FlowDirection="RightToLeft" 
+                              Style="{StaticResource FavsScrollViewer}" HorizontalScrollBarVisibility="Disabled">
                     <ListBox Background="Transparent" BorderThickness="0"
                              ItemsSource="{Binding Messages}" FlowDirection="LeftToRight">
                         <ListBox.ItemsPanel>
@@ -358,7 +358,7 @@
                         <ListBox.ItemTemplate>
                             <DataTemplate DataType="m:Message">
                                 <TextBlock Text="{Binding Text}" Foreground="White"
-                                FontFamily="Calibri" FontSize="16"/>
+                                FontFamily="Calibri" FontSize="16" TextWrapping="Wrap"/>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>

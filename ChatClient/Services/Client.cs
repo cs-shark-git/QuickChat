@@ -92,7 +92,7 @@ namespace ChatClient.Service
         public void SendMessage(string message)
         {
             BinaryWriter bw = new BinaryWriter(_netStream, Encoding.Default, true);
-            using (bw)
+            using(bw)
             {
                 bw.Write(message);
             }
@@ -102,7 +102,7 @@ namespace ChatClient.Service
         {
             var br = new BinaryReader(_netStream, Encoding.Default, true);
 
-            while (true)
+            while(true)
             {
                 try
                 {
@@ -153,9 +153,9 @@ namespace ChatClient.Service
                             _messages.Add(message);
                         }));
                         MessageListChanged(Messages);
-                    }                   
+                    }
                 }
-                catch (IOException)
+                catch(IOException)
                 {
 
                     Stop();
@@ -166,10 +166,10 @@ namespace ChatClient.Service
 
         public void Stop()
         {
-            if (_netStream != null)
+            if(_netStream != null)
                 _netStream.Close();
-            if (_tcpClient != null)
-                _tcpClient.Close();        
+            if(_tcpClient != null)
+                _tcpClient.Close();
         }
 
         private int SetUsers()
@@ -196,7 +196,7 @@ namespace ChatClient.Service
                 MessageBox.Show(ex.Message);
                 Stop();
                 return -1;
-            } 
+            }
         }
 
         private User FindUser(string name)
@@ -207,6 +207,30 @@ namespace ChatClient.Service
                     return user;
             }
             return null;
+        }
+
+        public string FormatMessage(string msg, int n)
+        {
+            var sb = new StringBuilder(msg.Length + (msg.Length + 9) / 10);
+            string space = " ";
+            for(int i = 0; i < _name.Length; i++)
+                space += " ";
+            space += space;
+
+            for(int q = 0; q < msg.Length;)
+            {
+                sb.Append(msg[q]);
+
+                if(++q % n == 0)
+                {
+                    sb.AppendLine();
+                    sb.Append(space);
+                }
+            }
+            if(msg.Length % n == 0)
+                --sb.Length;
+
+            return sb.ToString();
         }
     }
 }

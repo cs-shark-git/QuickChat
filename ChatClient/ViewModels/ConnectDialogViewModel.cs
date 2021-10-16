@@ -64,6 +64,7 @@ namespace ChatClient.ViewModels
 
         public ConnectDialogViewModel()
         {
+            Adress = "localhost:49276";
             _openChatCommand = new OpenChatCommand();
             _closeWindowCommand = new CloseWindowCommand();
             OnOpenChatCommand = new RelayCommand(OnOpenChatCommandExecute, OnOpenChatCommandCanExecute);
