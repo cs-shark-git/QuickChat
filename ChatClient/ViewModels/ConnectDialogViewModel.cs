@@ -46,7 +46,7 @@ namespace ChatClient.ViewModels
 
         public void OnOpenChatCommandExecute(object parameter)
         {
-            ConnectDataModelStatic.Name = _name;
+            ConnectDataModelStatic.Name = Name;
             ConnectDataModelStatic.Adress = Adress;
             if (ConnectDataModelStatic.ValidationStatus)
             {

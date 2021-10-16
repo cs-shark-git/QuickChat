@@ -34,6 +34,7 @@ namespace ChatClient.Service
         }
 
         private const string CONNECT_MSG = "UC";
+        private const string DISCONNECT_MSG = "UD";
         private ObservableCollection<Message> _messages;
         private ObservableCollection<User> _users;
 
@@ -118,12 +119,30 @@ namespace ChatClient.Service
                         UserListChanged(_users);
 
                         Message message = new Message();
-                        message.Text = $"[{DateTime.Now.Hour.ToString()}:{DateTime.Now.Minute.ToString()}:{DateTime.Now.Second.ToString()}] {user.Name} подключился к чату"; ;
+                        message.Text = $"{user.Name} подключился к чату";
                         _dispatcher.Invoke(new Action(() =>
                         {
                             _messages.Add(message);
                         }));
                         MessageListChanged(Messages);
+                    }
+                    else if(msg.Substring(0, 2) == DISCONNECT_MSG)
+                    {
+                        var user = FindUser(msg.Substring(2));
+
+                        Message message = new Message();
+                        message.Text = $"{user.Name} покинул чат";
+                        _dispatcher.Invoke(new Action(() =>
+                        {
+                            _messages.Add(message);
+                        }));
+                        MessageListChanged(Messages);
+
+                        _dispatcher.Invoke(new Action(() =>
+                        {
+                            _users.Remove(user);
+                        }));
+                        UserListChanged(_users);
                     }
                     else
                     {
@@ -178,6 +197,16 @@ namespace ChatClient.Service
                 Stop();
                 return -1;
             } 
+        }
+
+        private User FindUser(string name)
+        {
+            foreach(var user in _users)
+            {
+                if(user.Name == name)
+                    return user;
+            }
+            return null;
         }
     }
 }

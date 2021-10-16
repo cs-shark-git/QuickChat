@@ -17,6 +17,7 @@ namespace ChatServer
         public List<User> _users;
 
         private const string USER_CONNECT = "UC";
+        private const string USER_DISCONNECT = "UD";
 
         public Server(int port)
         {
@@ -70,14 +71,14 @@ namespace ChatServer
                     try
                     {
                         message = GetUserMessage(user);
-                        message = $"[{DateTime.Now.Hour.ToString()}:{DateTime.Now.Minute.ToString()}:{DateTime.Now.Second.ToString()}] {user.Name}: {message}";
+                        message = $"{user.Name}: {message}";
                         Console.WriteLine(message);
                         BroadcastMessage(message, user);
                     }
                     catch
                     {
-                        message = $"[{DateTime.Now.Hour.ToString()}:{DateTime.Now.Minute.ToString()}:{DateTime.Now.Second.ToString()}] {user.Name} покинул чат";
-                        Console.WriteLine(message);
+                        message = $"{USER_DISCONNECT}{user.Name}";
+                        Console.WriteLine($"{user.Name} покинул чат");
                         DisconnectUser(user);
                         RemoveUser(user);
                         BroadcastMessage(message, user);

@@ -80,13 +80,14 @@ namespace ChatClient.ViewModels
 
         public void SendMessageCommandExecute(object parameter)
         {
+            var txt = $"{_name}: {MessageText}";
             if(string.IsNullOrEmpty(MessageText)) return;
 
             _client.SendMessage(MessageText);
             var msg = new Message();
-            msg.Text = MessageText;
+            msg.Text = txt;
             Messages.Add(msg);
-            MessageText = "";
+            MessageText = string.Empty;
         }
 
         public bool SendMessageCommandCanExecute(object parameter) => true;

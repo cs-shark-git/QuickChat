@@ -7,6 +7,7 @@
         xmlns:vm="clr-namespace:ChatClient.ViewModels"
         xmlns:m="clr-namespace:ChatClient.Models"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
         MinHeight="400"
         MinWidth="600"
@@ -303,12 +304,14 @@
             <ColumnDefinition Width="200px"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <Button Content="Disconnect" Width="125" Height="25" FontFamily="Calibri" FontSize="14" 
+        <Button Width="125" Height="25" Content="Disconnect"
+                FontFamily="Calibri" FontSize="14" 
                 BorderThickness="0" Background="DarkRed" Margin="0,1,2,0" Foreground="White"
                 Focusable="False" Template="{StaticResource btTemplate}" Command="{Binding DisconnectCommand}"
                 VerticalAlignment="Top" HorizontalAlignment="Right" Grid.Column="1" 
                 CommandParameter=
-                "{Binding RelativeSource={RelativeSource AncestorType=local:Chat}}"/>
+                "{Binding RelativeSource={RelativeSource AncestorType=local:Chat}}">
+        </Button>
         <ListBox Background="#1b1a1b" BorderThickness="0" ItemsSource="{Binding Users}">
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="m:User">
@@ -331,16 +334,18 @@
                     </TextBox.InputBindings>
                 </TextBox>
                 <Button Panel.ZIndex="1" Grid.Row="1" Command="{Binding SendMessageCommand}" Width="50" HorizontalAlignment="Right" 
-                        Background="#121212" Content="Send" FontFamily="Calibri" FontSize="16" Foreground="White"
-                        BorderBrush="#1b1a1b" BorderThickness="2,2,2,2">
+                        Background="#121212" FontFamily="Calibri" FontSize="16" Foreground="White"
+                        BorderBrush="#1b1a1b" BorderThickness="2,2,2,2" Template="{StaticResource btTemplate}">
+                    <fa:ImageAwesome Icon="ArrowUp" HorizontalAlignment="Center" 
+                                     Foreground="White" Margin="12,5,12,5"/>
                 </Button>
             </Grid>
-      
-                <Grid  Margin="10,0,0,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="3.5*"/>
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
+
+            <Grid  Margin="10,0,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3.5*"/>
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
                 <ScrollViewer Grid.Column="0" ScrollViewer.VerticalScrollBarVisibility="Visible" FlowDirection="RightToLeft" 
                               Style="{StaticResource FavsScrollViewer}" >
                     <ListBox Background="Transparent" BorderThickness="0"
