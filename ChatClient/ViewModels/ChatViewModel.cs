@@ -12,6 +12,7 @@ using ChatClient.Framework;
 using System.Windows;
 using System.Collections.ObjectModel;
 using System.Windows.Threading;
+using ChatClient.Services;
 
 namespace ChatClient.ViewModels
 {
@@ -80,12 +81,10 @@ namespace ChatClient.ViewModels
 
         public void SendMessageCommandExecute(object parameter)
         {
-            var txt = $"{_name}: {_client.FormatMessage(MessageText, 40)}";
+            Message msg = new Message() { Text = $"{_name}: {MessageFormatter.AddSpaces(MessageText, 40, _name)}" };
             if(string.IsNullOrEmpty(MessageText)) return;
 
-            _client.SendMessage(txt);
-            var msg = new Message();
-            msg.Text = txt;
+            _client.SendMessage(msg);
             Messages.Add(msg);
             MessageText = string.Empty;
         }
