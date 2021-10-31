@@ -7,7 +7,6 @@ using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace ChatServer
 {
@@ -71,8 +70,7 @@ namespace ChatServer
                     try
                     {
                         message = GetUserMessage(user);
-                        message = $"{user.Name}: {message}";
-                        Console.WriteLine(message);
+                        Console.WriteLine($"{user.Name}: {message}");
                         BroadcastMessage(message, user);
                     }
                     catch
