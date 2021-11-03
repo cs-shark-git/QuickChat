@@ -105,11 +105,11 @@ namespace ChatClient.ViewModels
             {
                 new Message()
                 {
-                    Text = $"Подключение к чату завершено."
+                    Text = $"Connection finished"
                 },
                 new Message()
                 {
-                    Text = $"Добро пожаловать в чат, {_name}"
+                    Text = $"Welcome, {_name}"
                 }
             };
 

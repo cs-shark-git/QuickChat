@@ -76,7 +76,7 @@ namespace ChatServer
                     catch
                     {
                         message = $"{USER_DISCONNECT}{user.Name}";
-                        Console.WriteLine($"{user.Name} покинул чат");
+                        Console.WriteLine($"{user.Name} leave from chat");
                         DisconnectUser(user);
                         RemoveUser(user);
                         BroadcastMessage(message, user);

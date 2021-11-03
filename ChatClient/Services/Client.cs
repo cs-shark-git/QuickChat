@@ -41,11 +41,11 @@ namespace ChatClient.Service
             {
                 new Message()
                 {
-                    Text = $"Подключение к чату завершено."
+                    Text = $"Connection finished"
                 },
                 new Message()
                 {
-                    Text = $"Добро пожаловать в чат, {Name}"
+                    Text = $"Welcome, {Name}"
                 }
             };
             _tcpClient = new TcpClient();
@@ -91,18 +91,19 @@ namespace ChatClient.Service
                     if(new MessageParser(new ConnectMessageParser()).Parse(msg))
                     {
                         User user = new User();
-                        user.Name = msg.Text.Substring(2);
+                        user.Name = msg.Text[2..];
 
                         Message message = new Message();
-                        message.Text = $"{user.Name} подключился к чату";
+                        message.Text = $"{user.Name} connected to chat";
                         AddToUserCollectionWithDispatcher(user);
+                        AddToMessageCollectionWithDispatcher(message);
                     }
                     else if(new MessageParser(new DisconnectMessageParser()).Parse(msg))
                     {
                         var user = FindUserByName(msg.Text[2..]);
 
                         Message message = new Message();
-                        message.Text = $"{user.Name} покинул чат";
+                        message.Text = $"{user.Name} leave from chat";
 
                         AddToMessageCollectionWithDispatcher(message);
                         RemoveFromUserCollectionWithDispatcher(user);

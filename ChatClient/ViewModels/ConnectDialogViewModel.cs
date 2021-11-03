@@ -45,17 +45,13 @@ namespace ChatClient.ViewModels
         private OpenChatCommand _openChatCommand { get; }
 
         public void OnOpenChatCommandExecute(object parameter)
-        {
-            ConnectDataModelStatic.Name = Name;
-            ConnectDataModelStatic.Adress = Adress;
-            if (ConnectDataModelStatic.ValidationStatus)
+        {            
+            if (ConnectDataModelStatic.SetValues(Adress, Name))
             {
                 _openChatCommand.Execute(parameter);
                 Application.Current.MainWindow.Hide();
                 _closeWindowCommand.Execute(parameter);
             }
-
-            ConnectDataModelStatic.ValidationStatus = true;
         }
         public bool OnOpenChatCommandCanExecute(object parameter) => _openChatCommand.CanExecute(parameter);
 

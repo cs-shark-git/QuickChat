@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ChatClient.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
@@ -10,86 +11,29 @@ namespace ChatClient.Models
 {
     static class ConnectDataModelStatic
     {
-        static public int Port { get => _port; set => _port = value; }
-        static private int _port;
-        static public string Name
+        public static int Port => _port;
+        private static int _port;
+
+        public static string Name => _name;
+        private static string _name;
+
+        public static string Adress => _adress;
+        private static string _adress;
+
+        public static bool SetValues(string adress, string name)
         {
-            get => _name;
-            set
+            ConnectionDataValidator connectionDataValidator = new ConnectionDataValidator();
+            if(connectionDataValidator.Validate(adress, name))
             {
-                _name = value;
-                if (string.IsNullOrEmpty(_name))
-                {
-                    MessageBox.Show("Name can't be empty", "Stop", MessageBoxButton.OK, MessageBoxImage.Stop);
-                    _name = null;
-                    ValidationStatus = false;
-                    return;
-                }
+                _adress = connectionDataValidator.Adress;
+                _name = name;
+                _port = connectionDataValidator.Port;
+                return true;
             }
-        }
-        static private string _name;
-        static public string Adress
-        {
-            get => _adress;
-            set
-            {
-                _adress = value;
-                if (string.IsNullOrEmpty(_adress))
-                {
-                    MessageBox.Show("Adress can't be empty!", "Stop", MessageBoxButton.OK, MessageBoxImage.Stop);
-                    _adress = null;
-                    ValidationStatus = false;
-                    return;
-                }
-
-                if (Adress.Contains(':'))
-                {
-                    if (Adress.LastIndexOf(':') + 1 < Adress.Length)
-                    {
-                        bool error;
-                        error = int.TryParse(Adress.Substring(Adress.LastIndexOf(':') + 1), out _port);
-
-                        if (!error)
-                        {
-                            MessageBox.Show("Please input integer numbers after ':' !", "Stop", MessageBoxButton.OK, MessageBoxImage.Stop);
-                            ValidationStatus = false;
-                        }
-                        else
-                        {
-                            Adress = Adress.Substring(0, Adress.LastIndexOf(':'));
-                            if (!TryConnect(Adress))
-                            {
-                                MessageBox.Show("Impossible connect to this adress", "Stop", MessageBoxButton.OK, MessageBoxImage.Stop);
-                                _adress = null;
-                                ValidationStatus = false;
-                            }
-                        }
-
-                    }
-                }
-            }
-        }
-        static private string _adress;
-
-        static public bool ValidationStatus { get; set; }
-
-        static private bool TryConnect(string ip)
-        {
-            TcpClient tcpClient = new TcpClient();
-            try
-            {
-                tcpClient.Connect(ip, Port);
-            }
-            catch (Exception)
+            else
             {
                 return false;
             }
-            tcpClient.Close();
-            return true;
-        }
-        static ConnectDataModelStatic()
-        {
-            ValidationStatus = true;
         }
     }
 }
