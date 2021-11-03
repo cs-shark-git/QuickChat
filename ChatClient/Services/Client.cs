@@ -91,7 +91,7 @@ namespace ChatClient.Service
                     if(new MessageParser(new ConnectMessageParser()).Parse(msg))
                     {
                         User user = new User();
-                        user.Name = msg.Text.Substring(2);
+                        user.Name = msg.Text[2..];
 
                         Message message = new Message();
                         message.Text = $"{user.Name} connected to chat";
