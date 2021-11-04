@@ -6,8 +6,8 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Resources\Xaml\button_pattern.xaml" />
-                <ResourceDictionary Source="Resources\Xaml\list_box_item_pattern.xaml" />
+                <ResourceDictionary Source="Resources\Xaml\button.xaml" />
+                <ResourceDictionary Source="Resources\Xaml\list_box_item.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

@@ -42,7 +42,7 @@ namespace ChatClient.ViewModels
         }
 
         public ICommand OnOpenChatCommand { get; }
-        private OpenChatCommand _openChatCommand { get; }
+        readonly private OpenChatCommand _openChatCommand;
 
         public void OnOpenChatCommandExecute(object parameter)
         {            

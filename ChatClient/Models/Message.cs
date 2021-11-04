@@ -13,8 +13,10 @@ namespace ChatClient.Models
             get => _text;
             set
             {
-                if(!String.IsNullOrEmpty(value))
+                if(!string.IsNullOrEmpty(value))
+                {
                     _text = value;
+                }
             }
         }
         private string _text;

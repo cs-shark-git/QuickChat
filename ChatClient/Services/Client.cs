@@ -11,7 +11,7 @@ using ChatClient.Services.Client.Parsers;
 
 namespace ChatClient.Service
 {
-    class Client
+    internal class Client : IDisposable
     {
 
         public string Name { get; set; }
@@ -37,6 +37,17 @@ namespace ChatClient.Service
         public Client(string host, int port, Dispatcher dispatcher)
         {
             _userCollection = new ObservableCollection<User>();
+            InitializeMessageCollection();
+            _tcpClient = new TcpClient();
+
+            _host = host;
+            _port = port;
+
+            _dispatcher = dispatcher;
+        }
+
+        private void InitializeMessageCollection()
+        {
             Messages = new ObservableCollection<Message>()
             {
                 new Message()
@@ -48,12 +59,6 @@ namespace ChatClient.Service
                     Text = $"Welcome, {Name}"
                 }
             };
-            _tcpClient = new TcpClient();
-
-            _host = host;
-            _port = port;
-
-            _dispatcher = dispatcher;
         }
 
         public void Start()
@@ -100,7 +105,7 @@ namespace ChatClient.Service
                     }
                     else if(new MessageParser(new DisconnectMessageParser()).Parse(msg))
                     {
-                        var user = FindUserByName(msg.Text[2..]);
+                        User user = FindUserByName(msg.Text[2..]);
 
                         Message message = new Message();
                         message.Text = $"{user.Name} leave from chat";
@@ -121,7 +126,7 @@ namespace ChatClient.Service
             }
         }
 
-        void AddToUserCollectionWithDispatcher(User user)
+        private void AddToUserCollectionWithDispatcher(User user)
         {
             _dispatcher.Invoke(new Action(() =>
             {
@@ -130,7 +135,7 @@ namespace ChatClient.Service
             UserListChanged(_userCollection);
         }
 
-        void AddToMessageCollectionWithDispatcher(Message message)
+        private void AddToMessageCollectionWithDispatcher(Message message)
         {
             _dispatcher.Invoke(new Action(() =>
             {
@@ -139,7 +144,7 @@ namespace ChatClient.Service
             MessageListChanged(Messages);
         }
 
-        void RemoveFromUserCollectionWithDispatcher(User user)
+        private void RemoveFromUserCollectionWithDispatcher(User user)
         {
             _dispatcher.Invoke(new Action(() =>
             {
@@ -174,6 +179,12 @@ namespace ChatClient.Service
                     return user;
             }
             throw new Exception("Не удалось найти пользователя по имени");
+        }
+
+        public void Dispose()
+        {
+            _netStream.Dispose();
+            _tcpClient.Dispose();
         }
     }
 }
