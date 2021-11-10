@@ -70,7 +70,7 @@ namespace ChatServer
                     try
                     {
                         message = GetUserMessage(user);
-                        Console.WriteLine($"{user.Name}: {message}");
+                        Console.WriteLine(message);
                         BroadcastMessage(message, user);
                     }
                     catch

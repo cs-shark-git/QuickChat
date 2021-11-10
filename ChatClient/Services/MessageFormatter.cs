@@ -1,20 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 
 namespace ChatClient.Services
 {
-    static class MessageFormatter
+    internal static class MessageFormatter
     {
-        static public string AddSpaces(string msg, int n, string name)
+        public static string SplitMessageOnLines(string msg, int n, string name)
         {
-            var sb = new StringBuilder(msg.Length + (msg.Length + 9) / 10);
-            string space = " ";
-            for(int i = 0; i < name.Length; i++)
-                space += " ";
-            space += space;
+            StringBuilder sb = new StringBuilder(msg.Length + (msg.Length + 9) / 10);
+            string space = AddSpaces(name);
 
             for(int q = 0; q < msg.Length;)
             {
@@ -27,9 +20,23 @@ namespace ChatClient.Services
                 }
             }
             if(msg.Length % n == 0)
+            {
                 --sb.Length;
+            }
 
             return sb.ToString();
+        }
+
+        private static string AddSpaces(string name)
+        {
+            
+            string space = " ";
+            for(int i = 0; i < name.Length; i++)
+            {
+                space += " ";
+            }
+            space += space;
+            return space;
         }
     }
 }

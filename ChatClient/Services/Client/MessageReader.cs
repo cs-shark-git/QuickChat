@@ -25,20 +25,6 @@ namespace ChatClient.Services.Client
                 msg.Text = br.ReadString();
             }
             return msg;
-        }
-
-        public Message ReadMessages(ref ICollection<Message> col)
-        {
-            Message msg = new Message();
-            BinaryReader br = new BinaryReader(_netStream, Encoding.Default, true);
-            using(br)
-            {
-                while(true)
-                {
-                    msg.Text = br.ReadString();
-                    col.Add(msg);
-                }
-            }
-        }
+        }      
     }
 }

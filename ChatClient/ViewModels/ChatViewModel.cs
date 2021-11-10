@@ -1,14 +1,8 @@
 ﻿using ChatClient.Models;
 using ChatClient.ViewModels.Base;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ChatClient.Service;
 using System.Windows.Input;
 using ChatClient.Framework.Commands;
-using ChatClient.Framework;
 using System.Windows;
 using System.Collections.ObjectModel;
 using System.Windows.Threading;
@@ -62,7 +56,8 @@ namespace ChatClient.ViewModels
                 {
                     _client.Stop();
                     Application.Current.MainWindow.Show();
-                }, (p) => true);
+                }
+                , (p) => true);
             }
         }
         public ICommand DisconnectCommand { get; }
@@ -76,12 +71,14 @@ namespace ChatClient.ViewModels
             _client.Stop();
             Application.Current.MainWindow.Show();
             _closeWindow.Execute(parameter);
-            
         }
 
         public void SendMessageCommandExecute(object parameter)
         {
-            Message msg = new Message() { Text = $"{_name}: {MessageFormatter.AddSpaces(MessageText, 40, _name)}" };
+            Message msg = new Message()
+            {
+                Text = $"{_name}: {MessageFormatter.SplitMessageOnLines(MessageText, 40, _name)}"
+            };
             if(string.IsNullOrEmpty(MessageText)) return;
 
             _client.SendMessage(msg);
@@ -96,7 +93,6 @@ namespace ChatClient.ViewModels
 
             _closeWindow = new CloseWindowCommand();
             _dispatcher = Dispatcher.CurrentDispatcher;
-
             _port = ConnectDataModelStatic.Port;
             _adress = ConnectDataModelStatic.Adress;
             _name = ConnectDataModelStatic.Name;
@@ -112,12 +108,11 @@ namespace ChatClient.ViewModels
                     Text = $"Welcome, {_name}"
                 }
             };
-
             SendMessageCommand = new RelayCommand(SendMessageCommandExecute, SendMessageCommandCanExecute);
             DisconnectCommand = new RelayCommand(DisconnectCommandExecute, DisconnectCommandCanExecute);
+
             _client = new Client(_adress, _port, _dispatcher);
             _client.Name = _name;
-            _client.Messages = Messages;
             _client.MessageListChanged += OnMessageListChanged;
             _client.UserListChanged += OnUserListChanged;
             _client.Start();

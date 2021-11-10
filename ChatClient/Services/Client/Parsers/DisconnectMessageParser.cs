@@ -5,11 +5,11 @@ namespace ChatClient.Services.Client.Parsers
 {
     internal class DisconnectMessageParser : IMessageParser
     {
-        private const string CONNECT_MSG = "UD";
+        private const string DISCONNECT_MSG = "UD";
 
         public bool Parse(Message msg)
         {
-            if(msg.Text.Substring(0, 2) == CONNECT_MSG)
+            if(msg.Text.Substring(0, 2) == DISCONNECT_MSG)
             {
                 return true;
             }
