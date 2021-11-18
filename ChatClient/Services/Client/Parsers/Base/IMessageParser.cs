@@ -1,6 +1,6 @@
 ﻿using ChatClient.Models;
 
-namespace ChatClient.Services.Client.Parsers.Base
+namespace ChatClient.Services.Client.Parsers
 {
     interface IMessageParser
     {

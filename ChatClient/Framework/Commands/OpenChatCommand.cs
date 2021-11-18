@@ -1,4 +1,4 @@
-﻿using ChatClient.Framework.Commands.Base;
+﻿using System;
 using System.Windows;
 
 namespace ChatClient.Framework.Commands

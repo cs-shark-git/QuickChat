@@ -1,5 +1,4 @@
 ﻿using ChatClient.Models;
-using ChatClient.Services.Client.Parsers.Base;
 
 namespace ChatClient.Services.Client.Parsers
 {

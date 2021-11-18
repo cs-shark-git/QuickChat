@@ -1,8 +1,8 @@
-﻿using ChatClient.ViewModels.Base;
-using System.Windows;
+﻿using System.Windows;
 using ChatClient.Framework.Commands;
 using System.Windows.Input;
 using ChatClient.Models;
+
 
 namespace ChatClient.ViewModels
 {

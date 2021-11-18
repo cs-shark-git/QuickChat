@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace ChatClient.ViewModels.Base
+namespace ChatClient.ViewModels
 {
     internal abstract class ViewModel : INotifyPropertyChanged
     {

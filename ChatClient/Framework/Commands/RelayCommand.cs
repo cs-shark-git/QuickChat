@@ -1,5 +1,5 @@
-﻿using ChatClient.Framework.Commands.Base;
-using System;
+﻿using System;
+
 
 namespace ChatClient.Framework.Commands
 {

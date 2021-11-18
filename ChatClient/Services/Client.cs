@@ -98,8 +98,10 @@ namespace ChatClient.Service
 
                     if(new MessageParser(new ConnectMessageParser()).Parse(msg))
                     {
-                        User user = new User();
-                        user.Name = msg.Text[2..];
+                        User user = new User()
+                        {
+                            Name = msg.Text[2..]
+                        };
 
                         Message message = new Message();
                         message.Text = $"{user.Name} connected to chat";
@@ -128,8 +130,6 @@ namespace ChatClient.Service
                 }
             }
         }
-
-        //private MessageAnalizer
 
         private void AddToCollectionWithDispatcher(User user)
         {
@@ -175,7 +175,7 @@ namespace ChatClient.Service
             if(_tcpClient != null)
                 _tcpClient.Close();
         }
-              
+
         public void Dispose()
         {
             _netStream.Dispose();

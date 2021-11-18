@@ -1,5 +1,4 @@
 ﻿using ChatClient.Models;
-using ChatClient.ViewModels.Base;
 using ChatClient.Service;
 using System.Windows.Input;
 using ChatClient.Framework.Commands;
