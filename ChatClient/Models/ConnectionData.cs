@@ -2,7 +2,7 @@
 
 namespace ChatClient.Models
 {
-    static class ConnectDataModelStatic
+    static class ConnectionData
     {
         public static int Port => _port;
         private static int _port;

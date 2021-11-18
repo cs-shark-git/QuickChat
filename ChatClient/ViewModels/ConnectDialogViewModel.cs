@@ -39,7 +39,7 @@ namespace ChatClient.ViewModels
 
         public void OnOpenChatCommandExecute(object parameter)
         {            
-            if (ConnectDataModelStatic.SetValues(Adress, Name))
+            if (ConnectionData.SetValues(Adress, Name))
             {
                 _openChatCommand.Execute(parameter);
                 Application.Current.MainWindow.Hide();

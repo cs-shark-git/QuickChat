@@ -92,9 +92,9 @@ namespace ChatClient.ViewModels
 
             _closeWindow = new CloseWindowCommand();
             _dispatcher = Dispatcher.CurrentDispatcher;
-            _port = ConnectDataModelStatic.Port;
-            _adress = ConnectDataModelStatic.Adress;
-            _name = ConnectDataModelStatic.Name;
+            _port = ConnectionData.Port;
+            _adress = ConnectionData.Adress;
+            _name = ConnectionData.Name;
 
             Messages = new ObservableCollection<Message>()
             {
@@ -114,7 +114,14 @@ namespace ChatClient.ViewModels
             _client.Name = _name;
             _client.MessageListChanged += OnMessageListChanged;
             _client.UserListChanged += OnUserListChanged;
+            _client.ClientStopped += OnClientStopped;
             _client.Start();
+        }
+
+        private void OnClientStopped()
+        {
+            MessageBox.Show("Problem with connection or host, application closed", "Error");
+            Application.Current.Shutdown();
         }
 
         private void OnUserListChanged(ObservableCollection<User> userList)
@@ -122,9 +129,9 @@ namespace ChatClient.ViewModels
             Users = userList;
         }
 
-        private void OnMessageListChanged(ObservableCollection<Message> messageList)
+        private void OnMessageListChanged(Message message)
         {
-            Messages = messageList;
+            _dispatcher.Invoke(() => Messages.Add(message));
         }
     }
 }

@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Threading;
 using ChatClient.Models;
 using ChatClient.Services.Client;
@@ -16,8 +18,9 @@ namespace ChatClient.Service
 
         public string Name { get; set; }
 
-        public event Action<ObservableCollection<Message>> MessageListChanged;
+        public event Action<Message> MessageListChanged;
         public event Action<ObservableCollection<User>> UserListChanged;
+        public event Action ClientStopped;
 
         private ObservableCollection<Message> _messageCollection;
         private ObservableCollection<User> _userCollection;
@@ -26,9 +29,11 @@ namespace ChatClient.Service
         private TcpClient _tcpClient;
         private NetworkStream _netStream;
         private Dispatcher _dispatcher;
+        private Action _errorAction;
 
         public Client(string host, int port, Dispatcher dispatcher)
         {
+
             _userCollection = new ObservableCollection<User>();
             InitializeMessageCollection();
             _tcpClient = new TcpClient();
@@ -37,6 +42,7 @@ namespace ChatClient.Service
             _port = port;
 
             _dispatcher = dispatcher;
+            _errorAction = () => { Stop(); ClientStopped(); };
         }
 
         private void InitializeMessageCollection()
@@ -73,7 +79,7 @@ namespace ChatClient.Service
         public void SendMessage(Message message)
         {
             MessageWriter mr = new MessageWriter(_netStream);
-            mr.WriteMessage(message);
+            mr.WriteMessage(message, _errorAction);
         }
 
         private void SetUsers()
@@ -146,7 +152,7 @@ namespace ChatClient.Service
             {
                 _messageCollection.Add(message);
             }));
-            MessageListChanged(_messageCollection);
+            MessageListChanged(_messageCollection.Last());
         }
 
         private User FindUserByName(string name)
@@ -173,7 +179,7 @@ namespace ChatClient.Service
             if(_netStream != null)
                 _netStream.Close();
             if(_tcpClient != null)
-                _tcpClient.Close();
+                _tcpClient.Close();            
         }
 
         public void Dispose()

@@ -6,6 +6,8 @@ namespace ChatClient.Services
     {
         public static string SplitMessageOnLines(string msg, int n, string name)
         {
+            if(string.IsNullOrEmpty(msg)) return msg;
+
             StringBuilder sb = new StringBuilder(msg.Length + (msg.Length + 9) / 10);
             string space = AddSpaces(name);
 
