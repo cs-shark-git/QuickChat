@@ -1,6 +1,6 @@
 ﻿namespace ChatClient.Models
 {
-    class Message
+    internal class Message
     {
         public string Text
         {
