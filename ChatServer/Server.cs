@@ -12,11 +12,12 @@ namespace ChatServer
 {
     class Server
     {
-        TcpListener _tcpListener;
-        public List<User> _users;
-
+             
         private const string USER_CONNECT = "UC";
         private const string USER_DISCONNECT = "UD";
+
+        private TcpListener _tcpListener;
+        private List<User> _users;
 
         public Server(int port)
         {
@@ -28,24 +29,28 @@ namespace ChatServer
         {
             try
             {
-                _tcpListener.Start();
-                Console.WriteLine($"[{DateTime.Now.Hour.ToString()}:{DateTime.Now.Minute.ToString()}:{DateTime.Now.Second.ToString()}] Start listening connections...");
-                while(true)
-                {
-                    User user = new User();
-                    user.TcpClient = _tcpListener.AcceptTcpClient();
-                    user.NetStream = user.TcpClient.GetStream();
-                    _users.Add(user);
-                    Thread thread = new Thread(UserHandler);
-                    thread.Start();
-
-                }
+                ListenConnections();
             }
             catch(Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
 
+        }
+        private void ListenConnections()
+        {
+            _tcpListener.Start();
+            Console.WriteLine($"[{DateTime.Now.Hour}:{DateTime.Now.Minute}:{DateTime.Now.Second}] Start listening connections...");
+            while(true)
+            {
+                User user = new User();
+                user.TcpClient = _tcpListener.AcceptTcpClient();
+                user.NetStream = user.TcpClient.GetStream();
+                _users.Add(user);
+                Thread thread = new Thread(UserHandler);
+                thread.Start();
+
+            }
         }
 
         private void UserHandler()
@@ -54,7 +59,7 @@ namespace ChatServer
             try
             {
                 string message;
-                BinaryReader reader = new BinaryReader(user.NetStream, Encoding.Default, true);
+                BinaryReader reader = new BinaryReader(user.NetStream, Encoding.Default, true); 
 
                 user.Name = reader.ReadString();
                 message = user.Name;
@@ -70,7 +75,7 @@ namespace ChatServer
                     try
                     {
                         message = GetUserMessage(user);
-                        Console.WriteLine($"{user.Name}: {message}");
+                        Console.WriteLine(message);
                         BroadcastMessage(message, user);
                     }
                     catch
@@ -97,18 +102,41 @@ namespace ChatServer
 
         private void BroadcastMessage(string message, User excUser = null)
         {
+            BinaryWriter writer;
             foreach(var user in _users)
             {
                 if(user != excUser)
                 {
-                    using(BinaryWriter writer = new BinaryWriter(user.NetStream, Encoding.Default, true))
-                    {
-                        writer.Write(message);
-                        //writer.Flush();
-                    }
+                    writer = new BinaryWriter(user.NetStream, Encoding.Default, true);
+                    writer.Write(message);
                 }
             }
         }
+
+        private string SerializeUsers()
+        {
+            StringBuilder json = new StringBuilder();
+            foreach(var user in _users)
+            {
+                json.Append(JsonSerializer.Serialize(user) + '/');
+            }
+            return json.ToString();
+        }
+
+        private void SendMessage(string msg, User user)
+        {
+            BinaryWriter writer = new BinaryWriter(user.NetStream, Encoding.Default, true);
+            writer.Write(msg);
+        }
+
+        private string GetUserMessage(User user)
+        {
+            BinaryReader reader = new BinaryReader(user.NetStream, Encoding.Default, true);
+            var msg = reader.ReadString();
+            reader.Close();
+            return msg;
+        }
+
         private void DisconnectUser(User user)
         {
             user.NetStream?.Close();
@@ -124,38 +152,17 @@ namespace ChatServer
         public void Shutdown()
         {
             _tcpListener.Stop();
+            CloseAllUsers();
+            Environment.Exit(0);
+        }
 
+        private void CloseAllUsers()
+        {
             foreach(var user in _users)
             {
                 user.NetStream?.Close();
                 user.TcpClient?.Close();
             }
-            Environment.Exit(0);
-        }
-
-        private string GetUserMessage(User user)
-        {
-            BinaryReader reader = new BinaryReader(user.NetStream, Encoding.Default, true);
-            var msg = reader.ReadString();
-            reader.Close();
-            return msg;
-        }
-
-        private void SendMessage(string msg, User user)
-        {
-            BinaryWriter writer = new BinaryWriter(user.NetStream, Encoding.Default, true);
-            writer.Write(msg);
-            writer.Close();
-        }
-
-        private string SerializeUsers()
-        {
-            string json = null;
-            foreach(var user in _users)
-            {
-                json += JsonSerializer.Serialize(user) + '/';
-            }
-            return json;
-        }
+        }                  
     }
 }

@@ -1,11 +1,10 @@
 ﻿using ChatClient.Models;
-using ChatClient.Services.Client.Parsers.Base;
 
 namespace ChatClient.Services.Client.Parsers
 {
-    class MessageParser
+    internal class MessageParser
     {
-        private IMessageParser _parser;
+        private readonly IMessageParser _parser;
 
         public MessageParser(IMessageParser parser)
         {

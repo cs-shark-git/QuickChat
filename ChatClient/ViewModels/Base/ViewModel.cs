@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ChatClient.ViewModels.Base
+namespace ChatClient.ViewModels
 {
     internal abstract class ViewModel : INotifyPropertyChanged
     {
@@ -16,7 +12,7 @@ namespace ChatClient.ViewModels.Base
         {
             if(PropertyChanged is null) return;
 
-            var invocationList = PropertyChanged.GetInvocationList();
+            Delegate[] invocationList = PropertyChanged.GetInvocationList();
             foreach(var action in invocationList)
             {
                 action.DynamicInvoke(this, new PropertyChangedEventArgs(PropertyName));

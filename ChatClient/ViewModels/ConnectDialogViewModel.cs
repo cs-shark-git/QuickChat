@@ -1,15 +1,8 @@
-﻿using ChatClient.ViewModels.Base;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using ChatClient.Framework;
+﻿using System.Windows;
 using ChatClient.Framework.Commands;
 using System.Windows.Input;
 using ChatClient.Models;
+
 
 namespace ChatClient.ViewModels
 {
@@ -42,11 +35,11 @@ namespace ChatClient.ViewModels
         }
 
         public ICommand OnOpenChatCommand { get; }
-        private OpenChatCommand _openChatCommand { get; }
+        readonly private OpenChatCommand _openChatCommand;
 
         public void OnOpenChatCommandExecute(object parameter)
         {            
-            if (ConnectDataModelStatic.SetValues(Adress, Name))
+            if (ConnectionData.SetValues(Adress, Name))
             {
                 _openChatCommand.Execute(parameter);
                 Application.Current.MainWindow.Hide();

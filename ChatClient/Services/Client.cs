@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Threading;
 using ChatClient.Models;
 using ChatClient.Services.Client;
@@ -11,33 +13,41 @@ using ChatClient.Services.Client.Parsers;
 
 namespace ChatClient.Service
 {
-    class Client
+    internal class Client : IDisposable
     {
 
         public string Name { get; set; }
 
-        public ObservableCollection<Message> Messages { get; set; }
+        public event Action<Message> MessageListChanged;
+        public event Action<ObservableCollection<User>> UserListChanged;
+        public event Action ClientStopped;
 
+        private ObservableCollection<Message> _messageCollection;
         private ObservableCollection<User> _userCollection;
-
-        public delegate void MessageListChange(ObservableCollection<Message> messages);
-        public event MessageListChange MessageListChanged;
-
-        public delegate void UserListChange(ObservableCollection<User> users);
-        public event UserListChange UserListChanged;
-
         private string _host;
         private int _port;
-
         private TcpClient _tcpClient;
         private NetworkStream _netStream;
         private Dispatcher _dispatcher;
-
+        private Action _errorAction;
 
         public Client(string host, int port, Dispatcher dispatcher)
         {
+
             _userCollection = new ObservableCollection<User>();
-            Messages = new ObservableCollection<Message>()
+            InitializeMessageCollection();
+            _tcpClient = new TcpClient();
+
+            _host = host;
+            _port = port;
+
+            _dispatcher = dispatcher;
+            _errorAction = () => { Stop(); ClientStopped(); };
+        }
+
+        private void InitializeMessageCollection()
+        {
+            _messageCollection = new ObservableCollection<Message>()
             {
                 new Message()
                 {
@@ -48,12 +58,6 @@ namespace ChatClient.Service
                     Text = $"Welcome, {Name}"
                 }
             };
-            _tcpClient = new TcpClient();
-
-            _host = host;
-            _port = port;
-
-            _dispatcher = dispatcher;
         }
 
         public void Start()
@@ -75,7 +79,17 @@ namespace ChatClient.Service
         public void SendMessage(Message message)
         {
             MessageWriter mr = new MessageWriter(_netStream);
-            mr.WriteMessage(message);
+            mr.WriteMessage(message, _errorAction);
+        }
+
+        private void SetUsers()
+        {
+            UserCollectionParser parser = new UserCollectionParser();
+            MessageReader mr = new MessageReader(_netStream);
+            Message jsonMsg = mr.ReadMessage();
+            ICollection<User> col = parser.Parse(jsonMsg);
+            _userCollection = new ObservableCollection<User>(col);
+            UserListChanged(_userCollection);
         }
 
         private void ReceiveMessages()
@@ -90,27 +104,29 @@ namespace ChatClient.Service
 
                     if(new MessageParser(new ConnectMessageParser()).Parse(msg))
                     {
-                        User user = new User();
-                        user.Name = msg.Text[2..];
+                        User user = new User()
+                        {
+                            Name = msg.Text[2..]
+                        };
 
                         Message message = new Message();
                         message.Text = $"{user.Name} connected to chat";
-                        AddToUserCollectionWithDispatcher(user);
-                        AddToMessageCollectionWithDispatcher(message);
+                        AddToCollectionWithDispatcher(user);
+                        AddToCollectionWithDispatcher(message);
                     }
                     else if(new MessageParser(new DisconnectMessageParser()).Parse(msg))
                     {
-                        var user = FindUserByName(msg.Text[2..]);
+                        User user = FindUserByName(msg.Text[2..]);
 
                         Message message = new Message();
                         message.Text = $"{user.Name} leave from chat";
 
-                        AddToMessageCollectionWithDispatcher(message);
-                        RemoveFromUserCollectionWithDispatcher(user);
+                        AddToCollectionWithDispatcher(message);
+                        RemoveFromCollectionWithDispatcher(user);
                     }
                     else
                     {
-                        AddToMessageCollectionWithDispatcher(msg);
+                        AddToCollectionWithDispatcher(msg);
                     }
                 }
                 catch(IOException)
@@ -121,7 +137,7 @@ namespace ChatClient.Service
             }
         }
 
-        void AddToUserCollectionWithDispatcher(User user)
+        private void AddToCollectionWithDispatcher(User user)
         {
             _dispatcher.Invoke(new Action(() =>
             {
@@ -130,16 +146,26 @@ namespace ChatClient.Service
             UserListChanged(_userCollection);
         }
 
-        void AddToMessageCollectionWithDispatcher(Message message)
+        private void AddToCollectionWithDispatcher(Message message)
         {
             _dispatcher.Invoke(new Action(() =>
             {
-                Messages.Add(message);
+                _messageCollection.Add(message);
             }));
-            MessageListChanged(Messages);
+            MessageListChanged(_messageCollection.Last());
         }
 
-        void RemoveFromUserCollectionWithDispatcher(User user)
+        private User FindUserByName(string name)
+        {
+            foreach(var user in _userCollection)
+            {
+                if(user.Name == name)
+                    return user;
+            }
+            throw new Exception("Не удалось найти пользователя по имени");
+        }
+
+        private void RemoveFromCollectionWithDispatcher(User user)
         {
             _dispatcher.Invoke(new Action(() =>
             {
@@ -153,27 +179,13 @@ namespace ChatClient.Service
             if(_netStream != null)
                 _netStream.Close();
             if(_tcpClient != null)
-                _tcpClient.Close();
+                _tcpClient.Close();            
         }
 
-        private void SetUsers()
+        public void Dispose()
         {
-            UserCollectionParser parser = new UserCollectionParser();
-            MessageReader mr = new MessageReader(_netStream);
-            Message jsonMsg = mr.ReadMessage();
-            ICollection<User> col = parser.Parse(jsonMsg);
-            _userCollection = new ObservableCollection<User>(col);
-            UserListChanged(_userCollection);
-        }
-
-        private User FindUserByName(string name)
-        {
-            foreach(var user in _userCollection)
-            {
-                if(user.Name == name)
-                    return user;
-            }
-            throw new Exception("Не удалось найти пользователя по имени");
+            _netStream.Dispose();
+            _tcpClient.Dispose();
         }
     }
 }

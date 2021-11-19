@@ -1,11 +1,6 @@
 ﻿using ChatClient.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ChatClient.Services.Client.Parsers.Base
+namespace ChatClient.Services.Client.Parsers
 {
     interface IMessageParser
     {

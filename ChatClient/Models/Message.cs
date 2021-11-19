@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ChatClient.Models
+﻿namespace ChatClient.Models
 {
     class Message
     {
@@ -13,8 +7,10 @@ namespace ChatClient.Models
             get => _text;
             set
             {
-                if(!String.IsNullOrEmpty(value))
+                if(!string.IsNullOrEmpty(value))
+                {
                     _text = value;
+                }
             }
         }
         private string _text;

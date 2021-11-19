@@ -1,6 +1,5 @@
 ﻿using ChatClient.Models;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.Json;
 
@@ -10,6 +9,7 @@ namespace ChatClient.Services.Client.Parsers
     internal class UserCollectionParser
     {
         private string _message;
+
         public ICollection<User> Parse(Message message)
         {
             string msg = message.Text;
@@ -24,6 +24,7 @@ namespace ChatClient.Services.Client.Parsers
             }
             return collection;
         }
+
         private void MessageContainsNull()
         {
             if(_message.Contains("null"))

@@ -1,15 +1,8 @@
 ﻿using ChatClient.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 
 namespace ChatClient.Models
 {
-    static class ConnectDataModelStatic
+    static class ConnectionData
     {
         public static int Port => _port;
         private static int _port;
