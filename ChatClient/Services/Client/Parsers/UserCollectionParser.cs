@@ -10,14 +10,13 @@ namespace ChatClient.Services.Client.Parsers
     {
         private string _message;
 
-        public ICollection<User> Parse(Message message)
+        public ICollection<User> Parse(string message)
         {
-            string msg = message.Text;
             ICollection<User> collection = new List<User>();
-            _message = msg;
+            _message = message;
             MessageContainsNull();
-            msg = msg[0..^1];
-            List<string> list = msg.Split('/').ToList();
+            message = message[0..^1];
+            List<string> list = message.Split('/').ToList();
             for(int i = 0; i < list.Count; i++)
             {
                 collection.Add(JsonSerializer.Deserialize<User>(list[i]));

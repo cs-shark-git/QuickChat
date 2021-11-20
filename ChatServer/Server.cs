@@ -12,10 +12,7 @@ namespace ChatServer
 {
     class Server
     {
-             
-        private const string USER_CONNECT = "UC";
-        private const string USER_DISCONNECT = "UD";
-
+        
         private TcpListener _tcpListener;
         private List<User> _users;
 
@@ -58,33 +55,39 @@ namespace ChatServer
             User user = _users.Last();
             try
             {
-                string message;
+                
+
+                Message message = new Message();
                 BinaryReader reader = new BinaryReader(user.NetStream, Encoding.Default, true); 
 
                 user.Name = reader.ReadString();
-                message = user.Name;
-                Console.WriteLine(message);
-                BroadcastMessage(USER_CONNECT + message, user);
+                message.Text = user.Name;
+                message.Type = MessageType.UserConnection;
+                Console.WriteLine(message.Text + "connected to chat");
+                BroadcastMessage(SerializeMessage(message), user);
+                Console.WriteLine(SerializeMessage(message));
                 reader.Close();
-
                 string jsonUsers = SerializeUsers();
                 SendMessage(jsonUsers, user);
 
+
+                message.Type = MessageType.Default;
                 while(true)
                 {
                     try
                     {
-                        message = GetUserMessage(user);
+                        message.Text = GetUserMessage(user);
                         Console.WriteLine(message);
-                        BroadcastMessage(message, user);
+                        BroadcastMessage(SerializeMessage(message), user);
                     }
                     catch
                     {
-                        message = $"{USER_DISCONNECT}{user.Name}";
+                        message.Text = user.Name;
+                        message.Type = MessageType.UserDisconnection;
                         Console.WriteLine($"{user.Name} leave from chat");
                         DisconnectUser(user);
                         RemoveUser(user);
-                        BroadcastMessage(message, user);
+                        BroadcastMessage(SerializeMessage(message), user);
                         break;
                     }
                 }
@@ -113,6 +116,11 @@ namespace ChatServer
             }
         }
 
+        private string SerializeMessage(Message msg)
+        {
+            return JsonSerializer.Serialize(msg);
+        }
+
         private string SerializeUsers()
         {
             StringBuilder json = new StringBuilder();
@@ -122,7 +130,7 @@ namespace ChatServer
             }
             return json.ToString();
         }
-
+      
         private void SendMessage(string msg, User user)
         {
             BinaryWriter writer = new BinaryWriter(user.NetStream, Encoding.Default, true);

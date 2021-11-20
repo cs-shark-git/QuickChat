@@ -4,8 +4,8 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Net.Sockets;
+using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Threading;
 using ChatClient.Models;
 using ChatClient.Services.Client;
@@ -69,7 +69,7 @@ namespace ChatClient.Service
 
         private void Procces()
         {
-            Message msg = new Message() { Text = Name };
+            Message msg = new Message() { Text = Name, Type = MessageType.UserConnection};
             SendMessage(msg);
             SetUsers();
             Task task = new Task(ReceiveMessages);
@@ -84,9 +84,12 @@ namespace ChatClient.Service
 
         private void SetUsers()
         {
+            string jsonMsg;
             UserCollectionParser parser = new UserCollectionParser();
-            MessageReader mr = new MessageReader(_netStream);
-            Message jsonMsg = mr.ReadMessage();
+            using(BinaryReader br = new BinaryReader(_netStream, Encoding.Default, true))
+            {
+                jsonMsg = br.ReadString();
+            }
             ICollection<User> col = parser.Parse(jsonMsg);
             _userCollection = new ObservableCollection<User>(col);
             UserListChanged(_userCollection);
@@ -100,23 +103,24 @@ namespace ChatClient.Service
             {
                 try
                 {
-                    Message msg = mr.ReadMessage();
+                    Message msg = mr.Read();
 
-                    if(new MessageParser(new ConnectMessageParser()).Parse(msg))
+                    if(msg.Type == MessageType.UserConnection)
                     {
                         User user = new User()
                         {
-                            Name = msg.Text[2..]
+                            Name = msg.Text
                         };
 
                         Message message = new Message();
                         message.Text = $"{user.Name} connected to chat";
+
                         AddToCollectionWithDispatcher(user);
                         AddToCollectionWithDispatcher(message);
                     }
-                    else if(new MessageParser(new DisconnectMessageParser()).Parse(msg))
+                    else if(msg.Type == MessageType.UserDisconnection)
                     {
-                        User user = FindUserByName(msg.Text[2..]);
+                        User user = FindUserByName(msg.Text);
 
                         Message message = new Message();
                         message.Text = $"{user.Name} leave from chat";

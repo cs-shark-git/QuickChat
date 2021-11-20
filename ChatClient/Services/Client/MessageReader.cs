@@ -1,9 +1,9 @@
 ﻿using ChatClient.Models;
-using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
 using System.Text;
+using ChatClient.Services.Client.Parsers;
+using System.Collections.Generic;
 
 namespace ChatClient.Services.Client
 {
@@ -16,15 +16,21 @@ namespace ChatClient.Services.Client
             _netStream = netStream;
         }
 
-        public Message ReadMessage()
+        public Message Read()
         {
             Message msg = new Message();
             BinaryReader br = new BinaryReader(_netStream, Encoding.Default, true);
             using(br)
             {
-                msg.Text = br.ReadString();
+                msg = Parse(br.ReadString());
             }
             return msg;
-        }      
+        }
+
+        private Message Parse(string msg)
+        {
+            MessageParser parser = new MessageParser();
+            return parser.Parse(msg);
+        }
     }
 }
