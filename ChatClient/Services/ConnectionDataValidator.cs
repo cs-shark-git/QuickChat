@@ -23,19 +23,25 @@ namespace ChatClient.Services
         {
             _validationStatus = true;
 
-            NullOrEmptyCheck(name, ref _name);
-            NullOrEmptyCheck(adress, ref _adress);
+            if(!NullOrEmptyCheck(name, ref _name) ||
+            !NullOrEmptyCheck(adress, ref _adress))
+            {
+                return false;
+            }
             AdressValidationCheck();
             return _validationStatus;
         }
-        private void NullOrEmptyCheck(string value, ref string field)
+
+        private bool NullOrEmptyCheck(string value, ref string field)
         {
             if(string.IsNullOrEmpty(value))
             {
                 MessageBox.Show("This field can't be empty", "Stop", MessageBoxButton.OK, MessageBoxImage.Stop);
-                _validationStatus = false;
+                //_validationStatus = false;
+                return false;
             }
             field = value;
+            return true;
         }
 
         private void AdressValidationCheck()
@@ -49,11 +55,13 @@ namespace ChatClient.Services
                 else
                 {
                     MessageBox.Show("Please input integer numbers (port) after ':'", "Stop", MessageBoxButton.OK, MessageBoxImage.Stop);
+                    _validationStatus = false;
                 }
             }
             else
             {
                 MessageBox.Show("Adress must contains ':'", "Stop", MessageBoxButton.OK, MessageBoxImage.Stop);
+                _validationStatus = false;
             }
         }
 
