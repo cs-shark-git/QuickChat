@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace ChatClient.Services
@@ -37,7 +33,6 @@ namespace ChatClient.Services
             if(string.IsNullOrEmpty(value))
             {
                 MessageBox.Show("This field can't be empty", "Stop", MessageBoxButton.OK, MessageBoxImage.Stop);
-                //_validationStatus = false;
                 return false;
             }
             field = value;
