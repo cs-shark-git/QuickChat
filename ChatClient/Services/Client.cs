@@ -31,7 +31,7 @@ namespace ChatClient.Service
         private Dispatcher _dispatcher;
         private Action _errorAction;
 
-        public Client(string host, int port, Dispatcher dispatcher)
+        public Client(string host, int port)
         {
 
             _userCollection = new ObservableCollection<User>();
@@ -41,8 +41,13 @@ namespace ChatClient.Service
             _host = host;
             _port = port;
 
-            _dispatcher = dispatcher;
-            _errorAction = () => { Stop(); ClientStopped(); };
+            _dispatcher = Dispatcher.CurrentDispatcher;
+
+            _errorAction = () => 
+            {   
+                Stop();
+                ClientStopped(); 
+            };
         }
 
         private void InitializeMessageCollection()

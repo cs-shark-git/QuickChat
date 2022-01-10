@@ -37,7 +37,7 @@ namespace ChatServer
         private void ListenConnections()
         {
             _tcpListener.Start();
-            Console.WriteLine($"[{DateTime.Now.Hour}:{DateTime.Now.Minute}:{DateTime.Now.Second}] Start listening connections...");
+            Console.WriteLine($"[{DateTime.Now.ToString("hh:mm:ss")}] Start listening connections...");
             while(true)
             {
                 User user = new User();
@@ -63,7 +63,7 @@ namespace ChatServer
                 user.Name = reader.ReadString();
                 message.Text = user.Name;
                 message.Type = MessageType.UserConnection;
-                Console.WriteLine(message.Text + "connected to chat");
+                Console.WriteLine(message.Text + " connected to chat");
                 BroadcastMessage(SerializeMessage(message), user);
                 Console.WriteLine(SerializeMessage(message));
                 reader.Close();
@@ -77,7 +77,7 @@ namespace ChatServer
                     try
                     {
                         message.Text = GetUserMessage(user);
-                        Console.WriteLine(message);
+                        Console.WriteLine(message.Text);
                         BroadcastMessage(SerializeMessage(message), user);
                     }
                     catch
