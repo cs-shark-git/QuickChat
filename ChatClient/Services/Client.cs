@@ -22,7 +22,7 @@ namespace ChatClient.Service
         public event Action<ObservableCollection<User>> UserListChanged;
         public event Action ClientStopped;
 
-        private ObservableCollection<Message> _messageCollection;
+        private List<Message> _messageCollection;
         private ObservableCollection<User> _userCollection;
         private string _host;
         private int _port;
@@ -33,7 +33,6 @@ namespace ChatClient.Service
 
         public Client(string host, int port)
         {
-
             _userCollection = new ObservableCollection<User>();
             InitializeMessageCollection();
             _tcpClient = new TcpClient();
@@ -52,17 +51,7 @@ namespace ChatClient.Service
 
         private void InitializeMessageCollection()
         {
-            _messageCollection = new ObservableCollection<Message>()
-            {
-                new Message()
-                {
-                    Text = $"Connection finished"
-                },
-                new Message()
-                {
-                    Text = $"Welcome, {Name}"
-                }
-            };
+            _messageCollection = new List<Message>();
         }
 
         public void Start()
