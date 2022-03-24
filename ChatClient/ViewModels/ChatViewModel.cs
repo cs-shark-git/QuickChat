@@ -110,7 +110,7 @@ namespace ChatClient.ViewModels
             SendMessageCommand = new RelayCommand(SendMessageCommandExecute, SendMessageCommandCanExecute);
             DisconnectCommand = new RelayCommand(DisconnectCommandExecute, DisconnectCommandCanExecute);
 
-            _client = new Client(_adress, _port, _dispatcher);
+            _client = new Client(_adress, _port);
             _client.Name = _name;
             _client.MessageListChanged += OnMessageListChanged;
             _client.UserListChanged += OnUserListChanged;

@@ -1,4 +1,4 @@
-﻿namespace ChatClient.Models
+﻿namespace ChatServer
 {
     internal enum MessageType
     {
@@ -26,3 +26,4 @@
         public MessageType Type { get; set; }
     }
 }
+
